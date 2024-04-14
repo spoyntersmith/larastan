@@ -44,6 +44,7 @@ composer require --dev "larastan/larastan:^2.0"
 ```
 includes:
     - vendor/larastan/larastan/extension.neon
+    - vendor/nesbot/carbon/extension.neon
 
 parameters:
 
