@@ -1,5 +1,17 @@
 # Upgrade Guide
 
+## Upgrading to `3.x` from `2.x`
+
+This is a new majopr release with lots of breaking changes. Please read the following guide carefully.
+
+### Template annotation renames
+
+These changes were made in Laravel itself, so here we needed to follow the same changes. If you were using any of the template annotations in your code, you need to update them as follows:
+
+- `TModelClass` annotation of the Eloquent Builder class is renamed to `TModel`.
+- `TChildModel` annotation of the relation classes is renamed to `TDeclaringModel`.
+
+
 ## Upgrading to `2.9.6` from `2.9.5`
 
 This release adds support for Laravel 11 `casts` method. If you are using the `casts` method in your models, you will need to update the return type of the `casts` method to `array` in your model classes. Also, you'd need to provide the correct array shape for the return type. So that Larastan will recognize the model casts. Here is an example:
