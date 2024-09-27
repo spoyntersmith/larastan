@@ -4,22 +4,19 @@ namespace Illuminate\Database\Eloquent\Relations;
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
- * @extends Relation<TRelatedModel>
+ * @template TIntermediateModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
+ * @template TResult
+ *
+ * @extends \Illuminate\Database\Eloquent\Relations\Relation<TRelatedModel, TIntermediateModel, TResult>
  */
-class HasManyThrough extends Relation
+abstract class HasOneOrManyThrough extends Relation
 {
-    /**
-     * Get the results of the relationship.
-     *
-     * @phpstan-return \Traversable<int, TRelatedModel>
-     */
-    public function getResults();
-
     /**
      * Get a paginator for the "select" statement.
      *
      * @param  int|null  $perPage
-     * @param  array<int, mixed>  $columns
+     * @param  array<int, (model-property<TRelatedModel>|'*')>  $columns
      * @param  string  $pageName
      * @param  int|null  $page
      * @return \Illuminate\Pagination\LengthAwarePaginator<TRelatedModel>
@@ -30,7 +27,7 @@ class HasManyThrough extends Relation
      * Paginate the given query into a simple paginator.
      *
      * @param  int|null  $perPage
-     * @param  array<int, mixed>  $columns
+     * @param  array<int, (model-property<TRelatedModel>|'*')>  $columns
      * @param  string  $pageName
      * @param  int|null  $page
      * @return \Illuminate\Pagination\Paginator<TRelatedModel>
@@ -41,7 +38,7 @@ class HasManyThrough extends Relation
      * Paginate the given query into a cursor paginator.
      *
      * @param  int|null  $perPage
-     * @param  array<int, mixed>  $columns
+     * @param  array<int, (model-property<TRelatedModel>|'*')>  $columns
      * @param  string  $cursorName
      * @param  string|null  $cursor
      * @return \Illuminate\Pagination\CursorPaginator<TRelatedModel>
@@ -52,8 +49,8 @@ class HasManyThrough extends Relation
      * Find a related model by its primary key.
      *
      * @param  mixed  $id
-     * @param  array<int, string>  $columns
-     * @return TRelatedModel|\Illuminate\Database\Eloquent\Collection<int, TRelatedModel>|null
+     * @param  array<int, (model-property<TRelatedModel>|'*')>  $columns
+     * @return ($id is (\Illuminate\Contracts\Support\Arrayable<array-key, mixed>|array<mixed>) ? \Illuminate\Database\Eloquent\Collection<int, TRelatedModel> : TRelatedModel|null)
      */
     public function find($id, $columns = ['*']);
 
@@ -61,15 +58,8 @@ class HasManyThrough extends Relation
      * Find a related model by its primary key or throw an exception.
      *
      * @param  mixed  $id
-     * @param  array<int, string>  $columns
-     * @return TRelatedModel|\Illuminate\Database\Eloquent\Collection<int, TRelatedModel>
+     * @param  array<int, (model-property<TRelatedModel>|'*')>  $columns
+     * @return ($id is (\Illuminate\Contracts\Support\Arrayable<array-key, mixed>|array<mixed>) ? \Illuminate\Database\Eloquent\Collection<int, TRelatedModel> : TRelatedModel)
      */
     public function findOrFail($id, $columns = ['*']);
-
-    /**
-     * Convert the relationship to a "has one through" relationship.
-     *
-     * @return HasOneThrough<TRelatedModel>
-     */
-    public function one();
 }
