@@ -39,12 +39,17 @@ class User extends Model
 TODO: Link to the Rector to fix these automatically
 
 ### Template annotation renames
+######  Likelihood Of Impact: Low
 
 These changes were made in Laravel itself, so here we needed to follow the same changes. If you were using any of the template annotations in your code, you need to update them as follows:
 
 - `TModelClass` annotation of the Eloquent Builder class is renamed to `TModel`.
 - `TChildModel` annotation of the relation classes is renamed to `TDeclaringModel`.
 
+### Code related to Carbon has been removed
+######  Likelihood Of Impact: Low
+
+Larastan 3.x removed some code that was handling some edge cases related to Carbon. This code is now removed because the official Carbon PHPStan extension can do the same things. If you are using `phpstan-extension-installer` in your project you are already using the Carbon PHPStan extensions and there is nothing else to do. If not, you can add `vendor/nesbot/carbon/extension.neon` to your `phpstan.neon` file to enable the Carbon PHPStan extension.
 
 ## Upgrading to `2.9.6` from `2.9.5`
 
