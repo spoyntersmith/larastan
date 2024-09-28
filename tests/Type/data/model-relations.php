@@ -17,6 +17,7 @@ function test(User $user, \App\Address $address, Account $account, ExtendsModelW
 {
     assertType('Illuminate\Database\Eloquent\Relations\HasMany<App\Account, App\User>', $user->accounts());
     assertType('App\Account', $user->accounts()->firstOrCreate([]));
+    assertType('App\Account', $user->accounts()->createOrFirst([]));
     assertType(Post::class, $user->posts()->create());
     assertType('App\Account', $user->accounts()->create());
     assertType('App\Account', $user->syncableRelation()->create());

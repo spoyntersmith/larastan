@@ -248,21 +248,19 @@ class ModelCastHelper
 
         $modelCasts = $modelInstance->getCasts();
 
-        if (version_compare(LARAVEL_VERSION, '11.0.0', '>=')) { // @phpstan-ignore-line
-            $castsMethodReturnType = ParametersAcceptorSelector::selectSingle($modelClassReflection->getMethod(
-                'casts',
-                new OutOfClassScope(),
-            )->getVariants())->getReturnType();
+        $castsMethodReturnType = ParametersAcceptorSelector::selectSingle($modelClassReflection->getMethod(
+            'casts',
+            new OutOfClassScope(),
+        )->getVariants())->getReturnType();
 
-            if ($castsMethodReturnType->isConstantArray()->yes()) {
-                $modelCasts = array_merge(
-                    $modelCasts,
-                    array_combine(
-                        array_map(static fn ($key) => $key->getValue(), $castsMethodReturnType->getKeyTypes()), // @phpstan-ignore-line
-                        array_map(static fn ($value) => str_replace('\\\\', '\\', $value->getValue()), $castsMethodReturnType->getValueTypes()), // @phpstan-ignore-line
-                    ),
-                );
-            }
+        if ($castsMethodReturnType->isConstantArray()->yes()) {
+            $modelCasts = array_merge(
+                $modelCasts,
+                array_combine(
+                    array_map(static fn ($key) => $key->getValue(), $castsMethodReturnType->getKeyTypes()), // @phpstan-ignore-line
+                    array_map(static fn ($value) => str_replace('\\\\', '\\', $value->getValue()), $castsMethodReturnType->getValueTypes()), // @phpstan-ignore-line
+                ),
+            );
         }
 
         return $modelCasts;

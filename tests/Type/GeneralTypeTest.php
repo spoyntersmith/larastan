@@ -6,8 +6,6 @@ namespace Type;
 
 use PHPStan\Testing\TypeInferenceTestCase;
 
-use function version_compare;
-
 class GeneralTypeTest extends TypeInferenceTestCase
 {
     /** @return iterable<mixed> */
@@ -62,27 +60,7 @@ class GeneralTypeTest extends TypeInferenceTestCase
         yield from self::gatherAssertTypes(__DIR__ . '/data/view.php');
         yield from self::gatherAssertTypes(__DIR__ . '/data/where-relation.php');
         yield from self::gatherAssertTypes(__DIR__ . '/data/bug-1997.php');
-
-        if (version_compare(LARAVEL_VERSION, '10.15.0', '>=')) {
-            yield from self::gatherAssertTypes(__DIR__ . '/data/model-l10-15.php');
-        }
-
-        if (version_compare(LARAVEL_VERSION, '10.20.0', '>=')) {
-            yield from self::gatherAssertTypes(__DIR__ . '/data/model-l10-20.php');
-            yield from self::gatherAssertTypes(__DIR__ . '/data/model-relations-l10-20.php');
-        }
-
-        if (version_compare(LARAVEL_VERSION, '10.24.0', '>=')) {
-            yield from self::gatherAssertTypes(__DIR__ . '/data/query-builder-l10-24.php');
-        }
-
-        if (version_compare(LARAVEL_VERSION, '10.44.0', '>=')) {
-            yield from self::gatherAssertTypes(__DIR__ . '/data/bug-1819.php');
-        }
-
-        if (version_compare(LARAVEL_VERSION, '11.0.0', '>=')) {
-            yield from self::gatherAssertTypes(__DIR__ . '/data/model-properties-l11.php');
-        }
+        yield from self::gatherAssertTypes(__DIR__ . '/data/bug-1819.php');
 
         //##############################################################################################################
 

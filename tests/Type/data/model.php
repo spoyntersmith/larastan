@@ -110,6 +110,7 @@ function test(
     assertType('App\User', User::firstOrNew([]));
     assertType('App\User', User::updateOrCreate([]));
     assertType('App\User', User::firstOrCreate([]));
+    assertType('App\User', User::createOrFirst([]));
 
     assertType('Illuminate\Database\Eloquent\Builder<App\Thread>', Thread::valid());
     assertType('Illuminate\Database\Eloquent\Builder<App\Thread>', Thread::valid()->orWhere->valid());
@@ -131,7 +132,8 @@ function test(
     assertType('Illuminate\Database\Eloquent\Builder<App\User>', $user->with('accounts'));
     assertType('Illuminate\Database\Eloquent\Builder<App\User>', $user->with('accounts')->with('group'));
     assertType('Illuminate\Database\Eloquent\Builder<App\User>', $user->with(['accounts' => function (Relation $relation) {
-        assertType('Illuminate\Database\Eloquent\Relations\Relation<Illuminate\Database\Eloquent\Model>', $relation->orderBy('id'));
+        // TODO: fix this once we have closure parameter type changing extensions implemented
+        // assertType('Illuminate\Database\Eloquent\Relations\Relation<Illuminate\Database\Eloquent\Model>', $relation->orderBy('id'));
     }]));
     assertType('Illuminate\Database\Eloquent\Builder<App\User>', User::lockForUpdate());
     assertType('Illuminate\Database\Eloquent\Builder<App\User>', User::sharedLock());
@@ -152,6 +154,9 @@ function test(
     assertType('Illuminate\Database\Eloquent\Builder<App\User>', $className::query());
     assertType('Illuminate\Database\Eloquent\Builder<App\User>', $className::query()->active());
     assertType('Illuminate\Database\Eloquent\Collection<int, App\User>', $className::query()->active()->get());
+
+    assertType('string', Thread::valid()->toRawSql());
+    assertType('Illuminate\Database\Eloquent\Builder<App\Thread>', Thread::valid()->dumpRawSql());
 
     User::has('accounts', '=', 1, 'and', function (Builder $query) {
         assertType('Illuminate\Database\Eloquent\Builder', $query);
