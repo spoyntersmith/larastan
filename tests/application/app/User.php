@@ -121,7 +121,7 @@ class User extends Authenticatable
         return $this->belongsTo(Group::class)->withTrashed();
     }
 
-    /** @phpstan-return HasMany<Account> */
+    /** @phpstan-return HasMany<Account, User> */
     public function accounts(): HasMany
     {
         return $this->hasMany(Account::class);
@@ -137,13 +137,13 @@ class User extends Authenticatable
         return $this->hasMany(Account::class);
     }
 
-    /** @phpstan-return HasMany<ModelWithNonGenericCollection> */
+    /** @phpstan-return HasMany<ModelWithNonGenericCollection, User> */
     public function modelsWithNonGenericCollection(): HasMany
     {
         return $this->hasMany(ModelWithNonGenericCollection::class);
     }
 
-    /** @phpstan-return HasMany<ModelWithOnlyValueGenericCollection> */
+    /** @phpstan-return HasMany<ModelWithOnlyValueGenericCollection, User> */
     public function modelsWithOnlyValueGenericCollection(): HasMany
     {
         return $this->hasMany(ModelWithOnlyValueGenericCollection::class);
