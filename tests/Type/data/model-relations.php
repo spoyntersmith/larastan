@@ -159,7 +159,7 @@ class ExtendsModelWithPropertyAnnotations extends ModelWithPropertyAnnotations
 class Tag extends Model
 {
     /**
-     * @phpstan-return MorphToMany<Address>
+     * @phpstan-return MorphToMany<Address, $this>
      */
     public function addresses(): MorphToMany
     {
@@ -167,7 +167,7 @@ class Tag extends Model
     }
 
     /**
-     * @phpstan-return MorphToMany<Address>
+     * @phpstan-return MorphToMany<Address, $this>
      */
     public function addressesWithPivot(): MorphToMany
     {

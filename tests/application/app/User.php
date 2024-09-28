@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Casts\AsCollection;
 use Illuminate\Database\Eloquent\Casts\AsStringable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -115,55 +116,73 @@ class User extends Authenticatable
         return $query->where('active', 1);
     }
 
-    /** @phpstan-return BelongsTo<Group, User> */
+    /** @phpstan-return BelongsTo<Group, $this> */
     public function group(): BelongsTo
     {
         return $this->belongsTo(Group::class)->withTrashed();
     }
 
-    /** @phpstan-return HasMany<Account, User> */
+    /** @phpstan-return HasMany<Account, $this> */
     public function accounts(): HasMany
     {
         return $this->hasMany(Account::class);
     }
 
+    /**
+     * @return HasMany<Account, $this>
+     */
     public function accounts_snake(): HasMany
     {
         return $this->hasMany(Account::class);
     }
 
+    /**
+     * @return HasMany<Account, $this>
+     */
     public function accountsCamel(): HasMany
     {
         return $this->hasMany(Account::class);
     }
 
-    /** @phpstan-return HasMany<ModelWithNonGenericCollection, User> */
+    /** @phpstan-return HasMany<ModelWithNonGenericCollection, $this> */
     public function modelsWithNonGenericCollection(): HasMany
     {
         return $this->hasMany(ModelWithNonGenericCollection::class);
     }
 
-    /** @phpstan-return HasMany<ModelWithOnlyValueGenericCollection, User> */
+    /** @phpstan-return HasMany<ModelWithOnlyValueGenericCollection, $this> */
     public function modelsWithOnlyValueGenericCollection(): HasMany
     {
         return $this->hasMany(ModelWithOnlyValueGenericCollection::class);
     }
 
+    /**
+     * @return HasManyThrough<Transaction, Account, $this>
+     */
     public function transactions(): HasManyThrough
     {
         return $this->hasManyThrough(Transaction::class, Account::class);
     }
 
+    /**
+     * @return HasManySyncable<Account, $this>
+     */
     public function syncableRelation(): HasManySyncable
     {
         return $this->hasManySyncable(Account::class);
     }
 
+    /**
+     * @return MorphMany<Address, $this>
+     */
     public function address(): MorphMany
     {
         return $this->morphMany(Address::class, 'addressable');
     }
 
+    /**
+     * @return BelongsToMany<Role, $this>
+     */
     public function roles(): BelongsToMany
     {
         return $this->belongsToMany(Role::class)
@@ -171,21 +190,33 @@ class User extends Authenticatable
             ->wherePivotIn('some_column', [1, 2, 3]);
     }
 
+    /**
+     * @return HasMany<User, $this>
+     */
     public function children(): HasMany
     {
         return $this->hasMany(self::class, 'parent_id');
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function parent(): BelongsTo
     {
         return $this->belongsTo(get_class($this));
     }
 
+    /**
+     * @return BelongsToMany<Post, $this>
+     */
     public function posts(): BelongsToMany
     {
         return $this->belongsToMany(Post::class);
     }
 
+    /**
+     * @return HasManySyncable<Model, $this>
+     */
     public function hasManySyncable($related, $foreignKey = null, $localKey = null): HasManySyncable
     {
         $instance = $this->newRelatedInstance($related);

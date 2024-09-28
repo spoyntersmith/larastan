@@ -15,22 +15,33 @@ class Account extends Model
     use HasOwner;
     use HasParent;
 
+    /**
+     * @param Builder<Account> $query
+     *
+     * @return Builder<Account>
+     */
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('active', 1);
     }
 
+    /**
+     * @return HasMany<Transaction, $this>
+     */
     public function transactions(): HasMany
     {
         return $this->hasMany(Transaction::class);
     }
 
-    /** @phpstan-return BelongsTo<Group, Account> */
+    /** @phpstan-return BelongsTo<Group, $this> */
     public function group(): BelongsTo
     {
         return $this->belongsTo(Group::class);
     }
 
+    /**
+     * @return BelongsToMany<Post, $this>
+     */
     public function posts(): BelongsToMany
     {
         return $this->belongsToMany(Post::class);

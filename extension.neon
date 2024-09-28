@@ -125,16 +125,6 @@ services:
             - phpstan.broker.propertiesClassReflectionExtension
 
     -
-        class: Larastan\Larastan\Types\RelationDynamicMethodReturnTypeExtension
-        tags:
-            - phpstan.broker.dynamicMethodReturnTypeExtension
-
-    -
-        class: Larastan\Larastan\Types\ModelRelationsDynamicMethodReturnTypeExtension
-        tags:
-            - phpstan.broker.dynamicMethodReturnTypeExtension
-
-    -
         class: Larastan\Larastan\ReturnTypes\HigherOrderTapProxyExtension
         tags:
             - phpstan.broker.dynamicMethodReturnTypeExtension
@@ -414,11 +404,6 @@ services:
             - phpstan.phpDoc.typeNodeResolverExtension
         arguments:
             active: %checkModelProperties%
-
-    -
-        class: Larastan\Larastan\Types\RelationParserHelper
-        arguments:
-            parser: @currentPhpVersionSimpleDirectParser
 
     -
         class: Larastan\Larastan\Properties\MigrationHelper

@@ -6,17 +6,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @template TRelatedModel of \Illuminate\Database\Eloquent\Model
+ * @template TDeclaringModel of \Illuminate\Database\Eloquent\Model
  *
- * @extends HasMany<TRelatedModel>
+ * @extends HasMany<TRelatedModel, TDeclaringModel>
  */
 class HasManySyncable extends HasMany
 {
     /**
      * @param  mixed  $data
      * @param  bool  $deleting
-     * @return array
+     * @return array<string, mixed>
      */
-    public function sync($data, $deleting = true)
+    public function sync($data, $deleting = true): array
     {
         $changes = [
             'created' => [], 'deleted' => [], 'updated' => [],

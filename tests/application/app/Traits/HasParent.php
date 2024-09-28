@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 trait HasParent
 {
+    /**
+     * @return BelongsTo<static, $this>
+     */
     public function parent(): BelongsTo
     {
         return $this->belongsTo(static::class);

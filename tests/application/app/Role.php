@@ -11,6 +11,9 @@ class Role extends Model
 {
     protected $keyType = 'uuid';
 
+    /**
+     * @return BelongsToMany<User, $this>
+     */
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class);

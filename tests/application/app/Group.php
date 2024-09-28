@@ -13,13 +13,13 @@ class Group extends Model
 {
     use NestedSoftDeletes;
 
-    /** @phpstan-return HasMany<Account, Group> */
+    /** @phpstan-return HasMany<Account, $this> */
     public function accounts(): HasMany
     {
         return $this->hasMany(Account::class);
     }
 
-    /** @phpstan-return HasMany<User, Group> */
+    /** @phpstan-return HasMany<User, $this> */
     public function users(): HasMany
     {
         return $this->hasMany(User::class);

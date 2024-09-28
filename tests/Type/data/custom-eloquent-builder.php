@@ -133,7 +133,7 @@ class CustomEloquentBuilder extends Builder
 
 class FooModel extends Model
 {
-    /** @return HasMany<ModelWithCustomBuilder> */
+    /** @return HasMany<ModelWithCustomBuilder, $this> */
     public function customModels(): HasMany
     {
         return $this->hasMany(ModelWithCustomBuilder::class);

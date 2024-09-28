@@ -14,6 +14,9 @@ trait HasOwner
         return $this->ownerRelation;
     }
 
+    /**
+     * @return BelongsTo<User, $this>
+     */
     public function ownerRelation(): BelongsTo
     {
         return $this->belongsTo(User::class, 'author_id');

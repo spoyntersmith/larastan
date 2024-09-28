@@ -17,12 +17,14 @@ use Illuminate\Support\Str;
 use Larastan\Larastan\Concerns;
 use Larastan\Larastan\Reflection\ReflectionHelper;
 use Larastan\Larastan\Support\CollectionHelper;
-use Larastan\Larastan\Types\RelationParserHelper;
 use PHPStan\Analyser\OutOfClassScope;
 use PHPStan\Reflection\ClassReflection;
+use PHPStan\Reflection\MissingMethodFromReflectionException;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
+use PHPStan\ShouldNotHappenException;
+use PHPStan\Type\ErrorType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IntegerRangeType;
 use PHPStan\Type\IntersectionType;
@@ -42,7 +44,7 @@ final class ModelRelationsExtension implements PropertiesClassReflectionExtensio
 {
     use Concerns\HasContainer;
 
-    public function __construct(private RelationParserHelper $relationParserHelper, private CollectionHelper $collectionHelper)
+    public function __construct(private CollectionHelper $collectionHelper)
     {
     }
 
@@ -73,6 +75,10 @@ final class ModelRelationsExtension implements PropertiesClassReflectionExtensio
 
             $returnType = ParametersAcceptorSelector::selectSingle($classReflection->getNativeMethod($methodName)->getVariants())->getReturnType();
 
+            if ($returnType->getTemplateType(Relation::class, 'TRelatedModel') instanceof ErrorType) {
+                continue;
+            }
+
             if ((new ObjectType(Relation::class))->isSuperTypeOf($returnType)->yes()) {
                 return true;
             }
@@ -81,6 +87,10 @@ final class ModelRelationsExtension implements PropertiesClassReflectionExtensio
         return false;
     }
 
+    /**
+     * @throws ShouldNotHappenException
+     * @throws MissingMethodFromReflectionException
+     */
     public function getProperty(ClassReflection $classReflection, string $propertyName): PropertyReflection
     {
         if (str_ends_with($propertyName, '_count')) {
@@ -91,18 +101,12 @@ final class ModelRelationsExtension implements PropertiesClassReflectionExtensio
 
         $returnType = ParametersAcceptorSelector::selectSingle($method->getVariants())->getReturnType();
 
-        if ($returnType instanceof GenericObjectType) { // @phpstan-ignore-line This is a special shortcut we take
-            $relatedModel = $returnType->getTypes()[0];
+        $relatedModel = $returnType->getTemplateType(Relation::class, 'TRelatedModel');
 
-            if ($relatedModel->getObjectClassNames() === []) {
-                $relatedModelClassNames = [Model::class];
-            } else {
-                $relatedModelClassNames = $relatedModel->getObjectClassNames();
-            }
+        if ($relatedModel->getObjectClassNames() === []) {
+            $relatedModelClassNames = [Model::class];
         } else {
-            $modelName              = $this->relationParserHelper->findModelsInRelationMethod($method)[0] ?? Model::class;
-            $relatedModel           = new ObjectType($modelName);
-            $relatedModelClassNames = [$modelName];
+            $relatedModelClassNames = $relatedModel->getObjectClassNames();
         }
 
         $relationType = TypeTraverser::map($returnType, function (Type $type, callable $traverse) use ($relatedModelClassNames, $relatedModel) {
