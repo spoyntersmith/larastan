@@ -8,10 +8,6 @@ use Illuminate\Foundation\Application;
 use Larastan\Larastan\Rules\NoEnvCallsOutsideOfConfigRule;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
-use ReflectionClass;
-
-use function str_replace;
-use function version_compare;
 
 /** @extends RuleTestCase<NoEnvCallsOutsideOfConfigRule> */
 class NoEnvCallsOutsideOfConfigRuleTest extends RuleTestCase
@@ -44,17 +40,6 @@ class NoEnvCallsOutsideOfConfigRuleTest extends RuleTestCase
     protected function overrideConfigPath(string $path): void
     {
         $app = Application::getInstance();
-
-        if (version_compare(LARAVEL_VERSION, '10.0.0', '>=')) {
-            $app->useConfigPath($path);
-
-            return;
-        }
-
-        $reflectionClass = new ReflectionClass($app);
-        $property        = $reflectionClass->getProperty('basePath');
-        $property->setAccessible(true);
-
-        $property->setValue($app, str_replace('/config', '', $path));
+        $app->useConfigPath($path);
     }
 }

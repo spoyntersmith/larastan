@@ -52,7 +52,6 @@ use function array_merge;
 use function class_exists;
 use function explode;
 use function str_replace;
-use function version_compare;
 
 class ModelCastHelper
 {
