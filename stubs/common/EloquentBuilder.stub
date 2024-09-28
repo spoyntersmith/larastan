@@ -190,7 +190,7 @@ class Builder
     /**
      * Add a basic where clause to the query.
      *
-     * @param  (\Closure(static): void)|(\Closure(static): static)|model-property<TModel>|array<model-property<TModel>, mixed>|\Illuminate\Contracts\Database\Query\Expression  $column
+     * @param  (\Closure(static): void)|(\Closure(static): static)|model-property<TModel>|array<int|model-property<TModel>, mixed>|\Illuminate\Contracts\Database\Query\Expression  $column
      * @param  mixed  $operator
      * @param  mixed  $value
      * @param  string  $boolean
@@ -201,7 +201,7 @@ class Builder
     /**
      * Add an "or where" clause to the query.
      *
-     * @param  (\Closure(static): void)|(\Closure(static): static)|model-property<TModel>|array<model-property<TModel>, mixed>|\Illuminate\Contracts\Database\Query\Expression  $column
+     * @param  (\Closure(static): void)|(\Closure(static): static)|model-property<TModel>|array<int|model-property<TModel>, mixed>|\Illuminate\Contracts\Database\Query\Expression  $column
      * @param  mixed  $operator
      * @param  mixed  $value
      * @return $this
@@ -211,13 +211,50 @@ class Builder
     /**
      * Add a basic where clause to the query, and return the first result.
      *
-     * @param  (\Closure(static): void)|(\Closure(static): static)|model-property<TModel>|array<model-property<TModel>, mixed>|\Illuminate\Contracts\Database\Query\Expression  $column
+     * @param  (\Closure(static): void)|(\Closure(static): static)|model-property<TModel>|array<int|model-property<TModel>, mixed>|\Illuminate\Contracts\Database\Query\Expression  $column
      * @param  mixed  $operator
      * @param  mixed  $value
      * @param  string  $boolean
      * @phpstan-return TModel|null
      */
     public function firstWhere($column, $operator = null, $value = null, $boolean = 'and');
+
+    /**
+     * Add a basic "where not" clause to the query.
+     *
+     * @param  (\Closure(static): void)|(\Closure(static): static)|model-property<TModel>|array<int|model-property<TModel>, mixed>|\Illuminate\Contracts\Database\Query\Expression  $column
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @param  string  $boolean
+     * @return $this
+     */
+    public function whereNot($column, $operator = null, $value = null, $boolean = 'and');
+
+    /**
+     * Add an "or where not" clause to the query.
+     *
+     * @param  (\Closure(static): void)|(\Closure(static): static)|model-property<TModel>|array<int|model-property<TModel>, mixed>|\Illuminate\Contracts\Database\Query\Expression  $column
+     * @param  mixed  $operator
+     * @param  mixed  $value
+     * @return $this
+     */
+    public function orWhereNot($column, $operator = null, $value = null);
+
+    /**
+     * Add an "order by" clause for a timestamp to the query.
+     *
+     * @param  model-property<TModel>|\Illuminate\Contracts\Database\Query\Expression  $column
+     * @return $this
+     */
+    public function latest($column = null);
+
+    /**
+     * Add an "order by" clause for a timestamp to the query.
+     *
+     * @param  model-property<TModel>|\Illuminate\Contracts\Database\Query\Expression  $column
+     * @return $this
+     */
+    public function oldest($column = null);
 
     /**
      * Execute the query as a "select" statement.
@@ -249,6 +286,27 @@ class Builder
      * @return mixed
      */
     public function value($column);
+
+    /**
+     * Get a single column's value from the first result of a query if it's the sole matching record.
+     *
+     * @param  model-property<TModel>|\Illuminate\Contracts\Database\Query\Expression  $column
+     * @return mixed
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException<TModel>
+     * @throws \Illuminate\Database\MultipleRecordsFoundException
+     */
+    public function soleValue($column);
+
+    /**
+     * Get a single column's value from the first result of the query or throw an exception.
+     *
+     * @param  model-property<TModel>|\Illuminate\Contracts\Database\Query\Expression  $column
+     * @return mixed
+     *
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException<TModel>
+     */
+    public function valueOrFail($column);
 
     /**
      * Paginate the given query.
@@ -338,6 +396,51 @@ class Builder
      * @return bool
      */
     public function chunk($count, $callback);
+
+    /**
+     * Get a collection with the values of a given column.
+     *
+     * @param  model-property<TModel>|\Illuminate\Contracts\Database\Query\Expression  $column
+     * @param  string|null  $key
+     * @return \Illuminate\Support\Collection<array-key, mixed>
+     */
+    public function pluck($column, $key = null);
+
+    /**
+     * Increment a column's value by a given amount.
+     *
+     * @param  model-property<TModel>|\Illuminate\Contracts\Database\Query\Expression  $column
+     * @param  float|int  $amount
+     * @param  array<model-property<TModel>, mixed>  $extra
+     * @return int
+     */
+    public function increment($column, $amount = 1, array $extra = []);
+
+    /**
+     * Decrement a column's value by a given amount.
+     *
+     * @param  model-property<TModel>|\Illuminate\Contracts\Database\Query\Expression  $column
+     * @param  float|int  $amount
+     * @param  array<model-property<TModel>, mixed>  $extra
+     * @return int
+     */
+    public function decrement($column, $amount = 1, array $extra = []);
+
+    /**
+     * Qualify the given column name by the model's table.
+     *
+     * @param  model-property<TModel>|\Illuminate\Contracts\Database\Query\Expression  $column
+     * @return string
+     */
+    public function qualifyColumn($column);
+
+    /**
+     * Qualify the given columns with the model's table.
+     *
+     * @param  array<model-property<TModel>>|\Illuminate\Contracts\Database\Query\Expression  $columns
+     * @return array<string, mixed>
+     */
+    public function qualifyColumns($columns);
 }
 
 class Scope {}
