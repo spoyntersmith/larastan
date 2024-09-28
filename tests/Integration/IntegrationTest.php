@@ -68,12 +68,13 @@ class IntegrationTest extends PHPStanTestCase
         yield [
             __DIR__ . '/data/model-property-relation.php',
             [
-                4 => ['Parameter #1 $column of method Illuminate\Database\Eloquent\Relations\HasMany<App\Account,Illuminate\Database\Eloquent\Model>::where() expects array<model property of App\Account, mixed>|(Closure(Illuminate\Database\Eloquent\Relations\HasMany<App\Account>): Illuminate\Database\Eloquent\Relations\HasMany<App\Account>)|(Closure(Illuminate\Database\Eloquent\Relations\HasMany<App\Account>): void)|Illuminate\Contracts\Database\Query\Expression|model property of App\Account, \'foo\' given.'],
-                5 => ['Parameter #1 $attributes of method Illuminate\Database\Eloquent\Relations\HasOneOrMany<App\Account,Illuminate\Database\Eloquent\Model,Illuminate\Database\Eloquent\Collection<int, App\Account>>::create() expects array<model property of App\Account, mixed>, array<string, string> given.'],
-                6 => ['Parameter #1 $attributes of method Illuminate\Database\Eloquent\Relations\HasOneOrMany<App\Account,Illuminate\Database\Eloquent\Model,Illuminate\Database\Eloquent\Collection<int, App\Account>>::firstOrNew() expects array<model property of App\Account, mixed>, array<string, string> given.'],
-                7 => ['Parameter #1 $attributes of method Illuminate\Database\Eloquent\Relations\HasOneOrMany<App\Account,Illuminate\Database\Eloquent\Model,Illuminate\Database\Eloquent\Collection<int, App\Account>>::firstOrCreate() expects array<model property of App\Account, mixed>, array<string, string> given.'],
-                8 => ['Parameter #1 $attributes of method Illuminate\Database\Eloquent\Relations\HasOneOrMany<App\Account,Illuminate\Database\Eloquent\Model,Illuminate\Database\Eloquent\Collection<int, App\Account>>::updateOrCreate() expects array<model property of App\Account, mixed>, array<string, string> given.'],
-                10 => ['Parameter #1 $column of method Illuminate\Database\Eloquent\Relations\BelongsToMany<App\Post,Illuminate\Database\Eloquent\Model>::where() expects array<model property of App\Post, mixed>|(Closure(Illuminate\Database\Eloquent\Relations\BelongsToMany<App\Post>): Illuminate\Database\Eloquent\Relations\BelongsToMany<App\Post>)|(Closure(Illuminate\Database\Eloquent\Relations\BelongsToMany<App\Post>): void)|Illuminate\Contracts\Database\Query\Expression|model property of App\Post, \'foo\' given.'],
+                4 => ['Parameter #1 $column of method Illuminate\Database\Eloquent\Relations\HasMany<App\Account,App\User>::where() expects array<model property of App\Account, mixed>|(Closure(Illuminate\Database\Eloquent\Relations\HasMany<App\Account, App\User>): Illuminate\Database\Eloquent\Relations\HasMany<App\Account, App\User>)|(Closure(Illuminate\Database\Eloquent\Relations\HasMany<App\Account, App\User>): void)|Illuminate\Contracts\Database\Query\Expression|model property of App\Account, \'foo\' given.'],
+                5 => ['Parameter #1 $attributes of method Illuminate\Database\Eloquent\Relations\HasOneOrMany<App\Account,App\User,Illuminate\Database\Eloquent\Collection<int, App\Account>>::create() expects array<model property of App\Account, mixed>, array<string, string> given.'],
+                6 => ['Parameter #1 $attributes of method Illuminate\Database\Eloquent\Relations\HasOneOrMany<App\Account,App\User,Illuminate\Database\Eloquent\Collection<int, App\Account>>::firstOrNew() expects array<model property of App\Account, mixed>, array<string, string> given.'],
+                7 => ['Parameter #1 $attributes of method Illuminate\Database\Eloquent\Relations\HasOneOrMany<App\Account,App\User,Illuminate\Database\Eloquent\Collection<int, App\Account>>::firstOrCreate() expects array<model property of App\Account, mixed>, array<string, string> given.'],
+                8 => ['Parameter #1 $attributes of method Illuminate\Database\Eloquent\Relations\HasOneOrMany<App\Account,App\User,Illuminate\Database\Eloquent\Collection<int, App\Account>>::updateOrCreate() expects array<model property of App\Account, mixed>, array<string, string> given.'],
+                10 => ['Parameter #1 $column of method Illuminate\Database\Eloquent\Relations\BelongsToMany<App\Post,App\User>::where() expects array<model property of App\Post, mixed>|(Closure(Illuminate\Database\Eloquent\Relations\BelongsToMany<App\Post, App\User>): Illuminate\Database\Eloquent\Relations\BelongsToMany<App\Post, App\User>)|(Closure(Illuminate\Database\Eloquent\Relations\BelongsToMany<App\Post, App\User>): void)|Illuminate\Contracts\Database\Query\Expression|model property of App\Post, \'foo\' given.'],
+                12 => ['Parameter #1 $attributes of method Illuminate\Database\Eloquent\Relations\HasOneOrMany<App\Account,App\User,Illuminate\Database\Eloquent\Collection<int, App\Account>>::createOrFirst() expects array<model property of App\Account, mixed>, array<string, string> given.'],
             ],
         ];
 
@@ -84,14 +85,6 @@ class IntegrationTest extends PHPStanTestCase
                 14 => ['Parameter #1 $attributes of static method Illuminate\Database\Eloquent\Builder<App\User>::create() expects array<model property of App\User, mixed>, array<string, string> given.'],
                 26 => ['Parameter #1 $attributes of static method Illuminate\Database\Eloquent\Builder<ModelPropertyStaticCall\ModelPropertyStaticCallsInClass>::create() expects array<model property of ModelPropertyStaticCall\ModelPropertyStaticCallsInClass, mixed>, array<string, string> given.'],
                 34 => ['Parameter #1 $attributes of static method Illuminate\Database\Eloquent\Builder<ModelPropertyStaticCall\ModelPropertyStaticCallsInClass>::create() expects array<model property of ModelPropertyStaticCall\ModelPropertyStaticCallsInClass, mixed>, array<string, string> given.'],
-            ],
-        ];
-
-        yield [__DIR__ . '/data/eloquent-builder-l10.php'];
-        yield [
-            __DIR__ . '/data/model-property-relation-l10-20.php',
-            [
-                4 => ['Parameter #1 $attributes of method Illuminate\Database\Eloquent\Relations\HasOneOrMany<App\Account,Illuminate\Database\Eloquent\Model,Illuminate\Database\Eloquent\Collection<int, App\Account>>::createOrFirst() expects array<model property of App\Account, mixed>, array<string, string> given.'],
             ],
         ];
     }

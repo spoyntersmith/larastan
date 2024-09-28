@@ -8,3 +8,5 @@ $user->accounts()->firstOrCreate(['foo' => 'bar']);
 $user->accounts()->updateOrCreate(['foo' => 'bar']);
 
 $user->posts()->where('foo', 'bar');
+
+$user->accounts()->createOrFirst(['foo' => 'bar']);
