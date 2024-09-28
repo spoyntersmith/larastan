@@ -2,7 +2,41 @@
 
 ## Upgrading to `3.x` from `2.x`
 
-This is a new majopr release with lots of breaking changes. Please read the following guide carefully.
+This is a new major release with lots of breaking changes. Please read the following guide carefully.
+
+### Correct return types for model relation methods
+######  Likelihood Of Impact: High
+
+Normally PHPStan warns the users when a return type of method does not provide it's generic types. For example, the following code will produce a PHPStan error:
+
+```php
+class User extends Model
+{
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+}
+
+// Method User::posts() return type with generic class HasMany does not specify its types: TRelatedModel, TDeclaringModel
+```
+
+In the previous versions of Larastan, in this case Larastan would parse the model file and read the method body to understand the generic types of the relation. But this approach is slow (because it requires parsing the file) and the maintenance of this feature is hard. So in this version, Larastan will not parse the method body to understand the generic types of the relation. Instead, you need to provide the correct generic types in the return type of the relation method. Here is how you can fix the above example:
+
+```php
+class User extends Model
+{
+    /**
+     * @return HasMany<Post, $this>
+     */
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+}
+```
+
+TODO: Link to the Rector to fix these automatically
 
 ### Template annotation renames
 
