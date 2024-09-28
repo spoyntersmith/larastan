@@ -15,6 +15,7 @@ use function PHPStan\Testing\assertType;
 
 function test(User $user, \App\Address $address, Account $account, ExtendsModelWithPropertyAnnotations $model, Tag $tag, User|Account $union)
 {
+    assertType('Illuminate\Database\Eloquent\Relations\HasMany<App\Account, App\User>', $user->accounts());
     assertType('App\Account', $user->accounts()->firstOrCreate([]));
     assertType(Post::class, $user->posts()->create());
     assertType('App\Account', $user->accounts()->create());
@@ -28,8 +29,8 @@ function test(User $user, \App\Address $address, Account $account, ExtendsModelW
         'Illuminate\Database\Eloquent\Relations\MorphTo<Illuminate\Database\Eloquent\Model, App\Address>',
         $address->addressable()->where('name', 'bar')
     );
-    assertType('Illuminate\Database\Eloquent\Relations\MorphMany<App\Address>', $user->address()->where('name', 'bar'));
-    assertType('Illuminate\Database\Eloquent\Relations\HasMany<App\Account>', $user->accounts()->active());
+    assertType('Illuminate\Database\Eloquent\Relations\MorphMany<App\Address, App\User>', $user->address()->where('name', 'bar'));
+    assertType('Illuminate\Database\Eloquent\Relations\HasMany<App\Account, App\User>', $user->accounts()->active());
     assertType('App\RoleCollection<int, App\Role>', $user->roles()->get());
     /** @var Group $group */
     $group = $user->group;
@@ -38,15 +39,15 @@ function test(User $user, \App\Address $address, Account $account, ExtendsModelW
 
     assertType('App\AccountCollection<int, App\Account>', $group->accounts()->where('active', 1)->get());
     assertType('App\Account', $user->accounts()->make());
-    assertType('Illuminate\Database\Eloquent\Relations\HasMany<App\Account>', (new User())->accounts()->where('name', 'bar'));
-    assertType('Illuminate\Database\Eloquent\Relations\HasMany<App\Account>', (new User())->accounts()->whereIn('id', [1, 2, 3]));
-    assertType('Illuminate\Database\Eloquent\Relations\HasMany<App\Account>', (new User())->accounts()->whereActive(true));
+    assertType('Illuminate\Database\Eloquent\Relations\HasMany<App\Account, App\User>', (new User())->accounts()->where('name', 'bar'));
+    assertType('Illuminate\Database\Eloquent\Relations\HasMany<App\Account, App\User>', (new User())->accounts()->whereIn('id', [1, 2, 3]));
+    assertType('Illuminate\Database\Eloquent\Relations\HasMany<App\Account, App\User>', (new User())->accounts()->whereActive(true));
     assertType('App\Account', $user->accounts()->create());
     assertType('App\Account|null', (new User())->accounts()->where('name', 'bar')->first());
     assertType('App\User', User::with('accounts')->whereHas('accounts')->firstOrFail());
     assertType('Illuminate\Database\Eloquent\Relations\BelongsTo<App\User, App\Account>', $account->ownerRelation());
     assertType('Illuminate\Database\Eloquent\Relations\BelongsTo<App\Account, App\Account>', $account->parent());
-    assertType('Illuminate\Database\Eloquent\Relations\HasMany<App\User>', $user->children());
+    assertType('Illuminate\Database\Eloquent\Relations\HasMany<App\User, App\User>', $user->children());
     assertType('Illuminate\Database\Eloquent\Collection<int, App\User>', $user->__children);
     assertType('Illuminate\Database\Eloquent\Relations\BelongsTo<App\User, App\User>', $user->parent());
     assertType('App\Account|null', $user->accounts()->firstWhere('name', 'bar'));
@@ -55,8 +56,8 @@ function test(User $user, \App\Address $address, Account $account, ExtendsModelW
     assertType('Illuminate\Database\Eloquent\Relations\BelongsTo<App\Group, App\User>', $user->group()->withTrashed());
     assertType('Illuminate\Database\Eloquent\Relations\BelongsTo<App\Group, App\User>', $user->group()->onlyTrashed());
     assertType('Illuminate\Database\Eloquent\Relations\BelongsTo<App\Group, App\User>', $user->group()->withoutTrashed());
-    assertType('Illuminate\Database\Eloquent\Relations\MorphToMany<ModelRelations\Address>', $tag->addresses());
-    assertType('Illuminate\Database\Eloquent\Relations\MorphToMany<ModelRelations\Address>', $tag->addresses());
+    assertType('Illuminate\Database\Eloquent\Relations\MorphToMany<ModelRelations\Address, ModelRelations\Tag>', $tag->addresses());
+    assertType('Illuminate\Database\Eloquent\Relations\MorphToMany<ModelRelations\Address, ModelRelations\Tag>', $tag->addresses());
     assertType('Illuminate\Database\Eloquent\Builder<App\User>', User::with([
         'accounts' => function (HasMany $query) {
             return $query->where('foo', 'bar');
@@ -86,7 +87,7 @@ function test(User $user, \App\Address $address, Account $account, ExtendsModelW
     assertType('Illuminate\Database\Eloquent\Builder<App\User>', $users->getQuery());
     assertType('App\User', $users->make());
     assertType('Illuminate\Database\Eloquent\Relations\BelongsTo<App\Group, App\Account|App\User>', $union->group());
-    assertType('Illuminate\Database\Eloquent\Relations\BelongsToMany<App\Post>', $union->posts());
+    assertType('Illuminate\Database\Eloquent\Relations\BelongsToMany<App\Post, App\Account|App\User>', $union->posts());
 
     assertType('App\Account', $user->accounts()->sole());
     assertType('App\Group', $user->group()->sole());

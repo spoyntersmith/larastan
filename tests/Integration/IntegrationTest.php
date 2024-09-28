@@ -12,7 +12,6 @@ use Throwable;
 
 use function implode;
 use function sprintf;
-use function version_compare;
 
 class IntegrationTest extends PHPStanTestCase
 {

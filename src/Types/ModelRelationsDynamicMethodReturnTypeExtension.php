@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Larastan\Larastan\Types;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Larastan\Larastan\Concerns\HasContainer;
 use PhpParser\Node\Expr\MethodCall;
@@ -21,7 +20,6 @@ use PHPStan\Type\Type;
 use function array_map;
 use function count;
 use function in_array;
-use function version_compare;
 
 class ModelRelationsDynamicMethodReturnTypeExtension implements DynamicMethodReturnTypeExtension
 {
@@ -85,11 +83,7 @@ class ModelRelationsDynamicMethodReturnTypeExtension implements DynamicMethodRet
         return count($models) !== 0;
     }
 
-    /**
-     * @return Type
-     *
-     * @throws ShouldNotHappenException
-     */
+    /** @throws ShouldNotHappenException */
     public function getTypeFromMethodCall(
         MethodReflection $methodReflection,
         MethodCall $methodCall,
@@ -106,14 +100,6 @@ class ModelRelationsDynamicMethodReturnTypeExtension implements DynamicMethodRet
 
         $types   = array_map(static fn ($model) => new ObjectType((string) $model), $models);
         $types[] = $scope->getType($methodCall->var);
-
-        if (
-            // @phpstan-ignore-next-line
-            version_compare(LARAVEL_VERSION, '11.0.0', '<')
-            && ! (new ObjectType(BelongsTo::class))->isSuperTypeOf($returnType)->yes()
-        ) {
-            $types = [$types[0]];
-        }
 
         return new GenericObjectType($returnTypeObjectClassNames[0], $types);
     }
