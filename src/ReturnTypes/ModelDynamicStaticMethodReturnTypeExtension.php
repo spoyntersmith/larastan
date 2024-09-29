@@ -67,22 +67,22 @@ final class ModelDynamicStaticMethodReturnTypeExtension implements DynamicStatic
             return false;
         }
 
-        $method = $this->reflectionProvider->getClass(Model::class)->getNativeMethod($methodReflection->getName());
-
-        $returnType = ParametersAcceptorSelector::selectSingle($method->getVariants())->getReturnType();
-
-        return count(array_intersect([EloquentBuilder::class, QueryBuilder::class, Collection::class], $returnType->getReferencedClasses())) > 0;
+        return true;
     }
 
     public function getTypeFromStaticMethodCall(
         MethodReflection $methodReflection,
         StaticCall $methodCall,
         Scope $scope,
-    ): Type {
+    ): Type|null {
         $method = $methodReflection->getDeclaringClass()
             ->getMethod($methodReflection->getName(), $scope);
 
-        $returnType = ParametersAcceptorSelector::selectSingle($method->getVariants())->getReturnType();
+        $returnType = ParametersAcceptorSelector::selectFromArgs($scope, $methodCall->getArgs(), $method->getVariants())->getReturnType();
+
+        if (count(array_intersect([EloquentBuilder::class, QueryBuilder::class, Collection::class], $returnType->getReferencedClasses())) === 0) {
+            return null;
+        }
 
         if (count(array_intersect([EloquentBuilder::class], $returnType->getReferencedClasses())) > 0) {
             if ($methodCall->class instanceof Name) {

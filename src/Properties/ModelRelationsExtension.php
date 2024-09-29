@@ -20,7 +20,6 @@ use Larastan\Larastan\Support\CollectionHelper;
 use PHPStan\Analyser\OutOfClassScope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MissingMethodFromReflectionException;
-use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\PropertiesClassReflectionExtension;
 use PHPStan\Reflection\PropertyReflection;
 use PHPStan\ShouldNotHappenException;
@@ -73,7 +72,7 @@ final class ModelRelationsExtension implements PropertiesClassReflectionExtensio
                 continue;
             }
 
-            $returnType = ParametersAcceptorSelector::selectSingle($classReflection->getNativeMethod($methodName)->getVariants())->getReturnType();
+            $returnType = $classReflection->getNativeMethod($methodName)->getVariants()[0]->getReturnType();
 
             if ($returnType->getTemplateType(Relation::class, 'TRelatedModel') instanceof ErrorType) {
                 continue;
@@ -99,7 +98,7 @@ final class ModelRelationsExtension implements PropertiesClassReflectionExtensio
 
         $method = $classReflection->getMethod($propertyName, new OutOfClassScope());
 
-        $returnType = ParametersAcceptorSelector::selectSingle($method->getVariants())->getReturnType();
+        $returnType = $method->getVariants()[0]->getReturnType();
 
         $relatedModel = $returnType->getTemplateType(Relation::class, 'TRelatedModel');
 
