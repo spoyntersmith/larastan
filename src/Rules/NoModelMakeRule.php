@@ -76,7 +76,7 @@ class NoModelMakeRule implements Rule
         } elseif ($class instanceof Expr) {
             $type = $scope->getType($class);
 
-            if ($type->isClassStringType()->yes() && $type->getConstantStrings() !== []) {
+            if ($type->isClassString()->yes() && $type->getConstantStrings() !== []) {
                 $type = new ObjectType($type->getConstantStrings()[0]->getValue());
             }
         } else {

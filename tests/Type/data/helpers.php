@@ -43,7 +43,7 @@ function test(?int $value = 0): void
     assertType('mixed', request('foo'));
     assertType('array<string>', request(['foo', 'bar']));
 
-    assertType('string|null', rescue(function () {
+    assertType('\'ok\'|null', rescue(function () {
         if (mt_rand(0, 1)) {
             throw new Exception();
         }
@@ -51,7 +51,7 @@ function test(?int $value = 0): void
         return 'ok';
     }));
 
-    assertType('string', rescue(function () {
+    assertType('\'failed\'|\'ok\'', rescue(function () {
         if (mt_rand(0, 1)) {
             throw new Exception();
         }
@@ -59,7 +59,7 @@ function test(?int $value = 0): void
         return 'ok';
     }, 'failed'));
 
-    assertType('int|string', rescue(function () {
+    assertType('0|\'ok\'', rescue(function () {
         if (mt_rand(0, 1)) {
             throw new Exception();
         }
@@ -69,7 +69,7 @@ function test(?int $value = 0): void
         return 0;
     }));
 
-    assertType('int|string', rescue(function () {
+    assertType('0|\'ok\'', rescue(function () {
         if (mt_rand(0, 1)) {
             throw new Exception();
         }
@@ -79,7 +79,7 @@ function test(?int $value = 0): void
         return 0;
     }));
 
-    assertType('string', rescue(function () {
+    assertType('\'failed\'|\'ok\'', rescue(function () {
         if (mt_rand(0, 1)) {
             throw new Exception();
         }
@@ -93,7 +93,7 @@ function test(?int $value = 0): void
     assertType('null', retry(3, function () {
     }));
 
-    assertType('int', retry(3, function (): int {
+    assertType('5', retry(3, function (): int {
         return 5;
     }));
 
@@ -103,7 +103,7 @@ function test(?int $value = 0): void
         return true;
     }));
 
-    assertType('bool', retry(5, function (int $attempt): bool {
+    assertType('false', retry(5, function (int $attempt): bool {
         return false;
     }, 0, function (Exception $e): bool {
         return true;
@@ -112,8 +112,8 @@ function test(?int $value = 0): void
     assertType('Illuminate\Support\Stringable', str('foo'));
     assertType('mixed', str());
 
-    assertType('string', Str::replace('foo', 'bar', 'Laravel'));
-    assertType('array{string, string}', Str::replace('foo', 'bar', ['Laravel', 'Framework']));
+    assertType("'Laravel'", Str::replace('foo', 'bar', 'Laravel'));
+    assertType("array{'Laravel', 'Framework'}", Str::replace('foo', 'bar', ['Laravel', 'Framework']));
     assertType('array<int|string, string>', Str::replace('foo', 'bar', collect(['Laravel', 'Framework'])));
 
     assertType('App\User', tap(new User(), function (User $user): void {
@@ -142,14 +142,14 @@ function test(?int $value = 0): void
     assertType('array', transform(User::sole(), fn (User $user) => $user->toArray()));
 
     // falls back to default if provided
-    assertType('int|string', transform(optional(), fn () => 1, 'default'));
+    assertType("1|'default'", transform(optional(), fn () => 1, 'default'));
     // default as callable
-    assertType('int|string', transform(optional(), fn () => 1, fn () => 'string'));
+    assertType('1|\'string\'', transform(optional(), fn () => 1, fn () => 'string'));
 
     // non empty values
-    assertType('int', transform('filled', fn () => 1));
-    assertType('int', transform(['filled'], fn () => 1));
-    assertType('int', transform(new User(), fn () => 1));
+    assertType('1', transform('filled', fn () => 1));
+    assertType('1', transform(['filled'], fn () => 1));
+    assertType('1', transform(new User(), fn () => 1));
 
     // "empty" values
     assertType('null', transform(null, fn () => 1));
@@ -170,6 +170,6 @@ function test(?int $value = 0): void
 
     assertType('bool|string|null', env('foo'));
     assertType('bool|string|null', env('foo', null));
-    assertType('bool|int|string', env('foo', 120));
+    assertType('120|bool|string', env('foo', 120));
     assertType('bool|string', env('foo', ''));
 }

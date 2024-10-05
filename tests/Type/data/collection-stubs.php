@@ -26,7 +26,7 @@ function test(
         return false;
     }));
 
-    assertType('Illuminate\Support\Collection<string, string>', $items->map(function (int $item): string {
+    assertType('Illuminate\Support\Collection<string, numeric-string>', $items->map(function (int $item): string {
         return (string) $item;
     }));
 
@@ -34,7 +34,7 @@ function test(
     assertType('Illuminate\Database\Eloquent\Collection<int, App\User>', $collection->find([1]));
     assertType('App\User|null', $collection->find($user));
     assertType('App\User|null', $collection->find(1));
-    assertType('App\User|bool', $collection->find(1, false));
+    assertType('App\User|false', $collection->find(1, false));
 
     assertType('Illuminate\Support\Collection<(int|string), mixed>', $collection->pluck('id'));
 
@@ -64,13 +64,13 @@ function test(
         });
 
     assertType('App\User|null', $collection->first());
-    assertType('App\User|bool', $collection->first(null, false));
+    assertType('App\User|false', $collection->first(null, false));
     assertType('App\User|null', $collection->first(function ($user) {
         assertType('App\User', $user);
 
         return $user->id > 1;
     }));
-    assertType('App\User|bool', $collection->first(function (User $user) {
+    assertType('App\User|false', $collection->first(function (User $user) {
         assertType('App\User', $user);
 
         return $user->id > 1;
@@ -83,11 +83,11 @@ function test(
     assertType('App\User|null', $collection->firstWhere('blocked', '=', true));
 
     assertType('App\User|null', $collection->last());
-    assertType('App\User|bool', $collection->last(null, false));
+    assertType('App\User|false', $collection->last(null, false));
     assertType('App\User|null', $collection->last(function (User $user) {
         return $user->id > 1;
     }));
-    assertType('App\User|bool', $collection->last(function (User $user) {
+    assertType('App\User|false', $collection->last(function (User $user) {
         return $user->id > 1;
     }, function () {
         return false;

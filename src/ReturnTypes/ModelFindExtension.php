@@ -69,7 +69,7 @@ final class ModelFindExtension implements DynamicStaticMethodReturnTypeExtension
             if ($type->getObjectClassNames() !== []) {
                 $modelNames = $type->getObjectClassNames();
             } elseif (
-                $type->isClassStringType()->yes() &&
+                $type->isClassString()->yes() &&
                 count($type->getReferencedClasses()) > 0
             ) {
                 $modelNames = $type->getReferencedClasses();

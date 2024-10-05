@@ -15,7 +15,7 @@ class Foo
 function test(): void
 {
     assertType('mixed', optional(['foo' => 'bar']));
-    assertType('int', optional('1', function (string $value): int {
+    assertType('1', optional('1', function (string $value): int {
         return 1;
     }));
     assertType('null', optional(null, function (string $value): int {

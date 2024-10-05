@@ -50,10 +50,10 @@ class GenericModelPropertyType extends StringType
         return $this->type;
     }
 
-    public function acceptsWithReason(Type $type, bool $strictTypes): AcceptsResult
+    public function accepts(Type $type, bool $strictTypes): AcceptsResult
     {
         if ($type instanceof CompoundType) {
-            return $type->isAcceptedWithReasonBy($this, $strictTypes);
+            return $type->isAcceptedBy($this, $strictTypes);
         }
 
         if (count($type->getConstantStrings()) === 1) {
@@ -98,7 +98,7 @@ class GenericModelPropertyType extends StringType
         }
 
         if ($type instanceof self) {
-            return new AcceptsResult($this->getGenericType()->accepts($type->getGenericType(), $strictTypes), [sprintf('The given string should be a property of %s', $this->type->describe(VerbosityLevel::value()))]);
+            return new AcceptsResult($this->getGenericType()->accepts($type->getGenericType(), $strictTypes)->result, [sprintf('The given string should be a property of %s', $this->type->describe(VerbosityLevel::value()))]);
         }
 
         if ($type->isString()->yes()) {
@@ -156,7 +156,7 @@ class GenericModelPropertyType extends StringType
             $typeToInfer = new ObjectType($constantStrings[0]->getValue());
         } elseif ($receivedType instanceof self) {
             $typeToInfer = $receivedType->type;
-        } elseif ($receivedType->isClassStringType()->yes()) {
+        } elseif ($receivedType->isClassString()->yes()) {
             $typeToInfer = $this->getGenericType();
 
             if ($typeToInfer instanceof TemplateType) {

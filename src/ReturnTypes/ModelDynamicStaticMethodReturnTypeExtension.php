@@ -99,7 +99,7 @@ final class ModelDynamicStaticMethodReturnTypeExtension implements DynamicStatic
             } elseif ($methodCall->class instanceof Expr) {
                 $type = $scope->getType($methodCall->class);
 
-                if ($type->isClassStringType()->yes()) {
+                if ($type->isClassString()->yes()) {
                     $type = $type->getClassStringObjectType();
                 }
 

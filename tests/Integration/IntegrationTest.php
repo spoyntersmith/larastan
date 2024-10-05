@@ -10,6 +10,7 @@ use PHPStan\File\FileHelper;
 use PHPStan\Testing\PHPStanTestCase;
 use Throwable;
 
+use function count;
 use function implode;
 use function sprintf;
 
@@ -20,7 +21,7 @@ class IntegrationTest extends PHPStanTestCase
     {
         self::getContainer();
 
-        yield [__DIR__ . '/data/test-case-extension.php'];
+        yield [__DIR__ . '/data/test-case-extension.php', [39 => ['Call to function method_exists() with $this(TestTestCase) and \'partialMock\' will always evaluate to true.']]];
         yield [__DIR__ . '/data/model-builder.php'];
         yield [__DIR__ . '/data/model-properties.php'];
         yield [__DIR__ . '/data/blade-view.php'];
@@ -48,7 +49,7 @@ class IntegrationTest extends PHPStanTestCase
         yield [
             __DIR__ . '/data/model-property-model.php',
             [
-                11 => ['Parameter #1 $attributes of method Illuminate\Database\Eloquent\Model::update() expects array<model property of ModelPropertyModel\ModelPropertyOnModel, mixed>, array<string, string> given.'],
+                11 => ['Parameter #1 $attributes of method Illuminate\Database\Eloquent\Model::update() expects array<model property of static(ModelPropertyModel\ModelPropertyOnModel), mixed>, array<string, string> given.'],
                 18 => ['Parameter #1 $attributes of method Illuminate\Database\Eloquent\Model::update() expects array<model property of App\Account|App\User, mixed>, array<string, string> given.'],
                 25 => ['Parameter #1 $attributes of method Illuminate\Database\Eloquent\Model::update() expects array<model property of App\Account|App\User, mixed>, array<string, string> given.'],
                 49 => ['Parameter #1 $property of method ModelPropertyModel\ModelPropertyCustomMethods::foo() expects model property of App\User, string given.'],
@@ -101,6 +102,10 @@ class IntegrationTest extends PHPStanTestCase
         if ($expectedErrors === null) {
             $this->assertNoErrors($errors);
         } else {
+            if (count($expectedErrors) > 0) {
+                $this->assertNotEmpty($errors);
+            }
+
             $this->assertSameErrorMessages($expectedErrors, $errors);
         }
     }

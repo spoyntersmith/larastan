@@ -6,7 +6,6 @@ namespace Reflection;
 
 use Illuminate\Http\RedirectResponse;
 use Larastan\Larastan\Methods\RedirectResponseMethodsClassReflectionExtension;
-use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Testing\PHPStanTestCase;
 use PHPStan\Type\VerbosityLevel;
@@ -55,7 +54,7 @@ class RedirectResponseMethodsClassReflectionExtensionTest extends PHPStanTestCas
     {
         $requestClass       = $this->reflectionProvider->getClass(RedirectResponse::class);
         $methodReflection   = $this->reflectionExtension->getMethod($requestClass, $methodName);
-        $parametersAcceptor = ParametersAcceptorSelector::selectSingle($methodReflection->getVariants());
+        $parametersAcceptor = $methodReflection->getVariants()[0];
 
         $this->assertSame($methodName, $methodReflection->getName());
         $this->assertSame($requestClass, $methodReflection->getDeclaringClass());

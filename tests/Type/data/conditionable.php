@@ -24,7 +24,7 @@ function test(Builder $query): void
         return null;
     }));
 
-    assertType('int', (new Foo())->when(true, function (Foo $foo): int {
+    assertType('int<0, max>', (new Foo())->when(true, function (Foo $foo): int {
         return rand();
     }));
 
@@ -41,7 +41,7 @@ function test(Builder $query): void
         return null;
     }));
 
-    assertType('int', (new Foo())->unless(true, function (Foo $foo): int {
+    assertType('int<0, max>', (new Foo())->unless(true, function (Foo $foo): int {
         return rand();
     }));
 

@@ -10,10 +10,10 @@ use function PHPStan\Testing\assertType;
 
 function test(): void
 {
-    assertType('int', DB::transaction(fn () => 1));
-    assertType('string', DB::transaction(fn () => 'lorem'));
-    assertType('float', DB::transaction(fn () => 8.1));
-    assertType('bool', DB::transaction(fn () => true));
+    assertType('1', DB::transaction(fn () => 1));
+    assertType('\'lorem\'', DB::transaction(fn () => 'lorem'));
+    assertType('8.1', DB::transaction(fn () => 8.1));
+    assertType('true', DB::transaction(fn () => true));
     assertType('null', DB::transaction(function () {
         echo 'ipsum';
     }));
