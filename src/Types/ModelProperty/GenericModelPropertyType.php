@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Larastan\Larastan\Types\ModelProperty;
 
 use Larastan\Larastan\Properties\ModelPropertyHelper;
-use PHPStan\TrinaryLogic;
 use PHPStan\Type\AcceptsResult;
 use PHPStan\Type\CompoundType;
 use PHPStan\Type\Generic\TemplateType;

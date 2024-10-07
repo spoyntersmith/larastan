@@ -63,11 +63,7 @@ final class ModelDynamicStaticMethodReturnTypeExtension implements DynamicStatic
             return true;
         }
 
-        if (! $this->reflectionProvider->getClass(Model::class)->hasNativeMethod($name)) {
-            return false;
-        }
-
-        return true;
+        return $this->reflectionProvider->getClass(Model::class)->hasNativeMethod($name);
     }
 
     public function getTypeFromStaticMethodCall(

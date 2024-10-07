@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Larastan\Larastan\Types;
 
 use Illuminate\View\Factory;
-use PHPStan\TrinaryLogic;
 use PHPStan\Type\AcceptsResult;
 use PHPStan\Type\CompoundType;
 use PHPStan\Type\IsSuperTypeOfResult;
