@@ -13,6 +13,7 @@ use PHPStan\Type\Generic\TemplateTypeMap;
 use PHPStan\Type\Generic\TemplateTypeReference;
 use PHPStan\Type\Generic\TemplateTypeVariance;
 use PHPStan\Type\IntersectionType;
+use PHPStan\Type\IsSuperTypeOfResult;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\ObjectWithoutClassType;
@@ -110,16 +111,16 @@ class GenericModelPropertyType extends StringType
         return AcceptsResult::createNo();
     }
 
-    public function isSuperTypeOf(Type $type): TrinaryLogic
+    public function isSuperTypeOf(Type $type): IsSuperTypeOfResult
     {
         $constantStrings = $type->getConstantStrings();
 
         if (count($constantStrings) === 1) {
             if (! $this->getGenericType()->hasProperty($constantStrings[0]->getValue())->yes()) {
-                return TrinaryLogic::createNo();
+                return IsSuperTypeOfResult::createNo();
             }
 
-            return TrinaryLogic::createYes();
+            return IsSuperTypeOfResult::createYes();
         }
 
         if ($type instanceof self) {
@@ -130,7 +131,7 @@ class GenericModelPropertyType extends StringType
             return $type->isSubTypeOf($this);
         }
 
-        return TrinaryLogic::createNo();
+        return IsSuperTypeOfResult::createNo();
     }
 
     public function traverse(callable $cb): Type

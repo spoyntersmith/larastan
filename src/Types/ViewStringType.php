@@ -8,6 +8,7 @@ use Illuminate\View\Factory;
 use PHPStan\TrinaryLogic;
 use PHPStan\Type\AcceptsResult;
 use PHPStan\Type\CompoundType;
+use PHPStan\Type\IsSuperTypeOfResult;
 use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
@@ -52,7 +53,7 @@ class ViewStringType extends StringType
         return AcceptsResult::createNo();
     }
 
-    public function isSuperTypeOf(Type $type): TrinaryLogic
+    public function isSuperTypeOf(Type $type): IsSuperTypeOfResult
     {
         $constantStrings = $type->getConstantStrings();
 
@@ -60,22 +61,22 @@ class ViewStringType extends StringType
             /** @var Factory $view */
             $view = view();
 
-            return TrinaryLogic::createFromBoolean($view->exists($constantStrings[0]->getValue()));
+            return IsSuperTypeOfResult::createFromBoolean($view->exists($constantStrings[0]->getValue()));
         }
 
         if ($type instanceof self) {
-            return TrinaryLogic::createYes();
+            return IsSuperTypeOfResult::createYes();
         }
 
         if ($type->isString()->yes()) {
-            return TrinaryLogic::createMaybe();
+            return IsSuperTypeOfResult::createMaybe();
         }
 
         if ($type instanceof CompoundType) {
             return $type->isSubTypeOf($this);
         }
 
-        return TrinaryLogic::createNo();
+        return IsSuperTypeOfResult::createNo();
     }
 
     /** @param  mixed[] $properties */
