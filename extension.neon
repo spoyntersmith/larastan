@@ -23,7 +23,6 @@ parameters:
     disableSchemaScan: false
     viewDirectories: []
     checkModelProperties: false
-    checkPhpDocMissingReturn: false
     checkUnusedViews: false
     checkModelAppends: false
 

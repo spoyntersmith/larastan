@@ -1,6 +1,6 @@
 # Upgrade Guide
 
-## Upgrading to `3.x` from `2.x`
+## Upgrading to `3.0` from `2.x`
 
 This is a new major release with lots of breaking changes. Please read the following guide carefully.
 
@@ -50,6 +50,10 @@ These changes were made in Laravel itself, so here we needed to follow the same 
 ######  Likelihood Of Impact: Low
 
 Larastan 3.x removed some code that was handling some edge cases related to Carbon. This code is now removed because the official Carbon PHPStan extension can do the same things. If you are using `phpstan-extension-installer` in your project you are already using the Carbon PHPStan extensions and there is nothing else to do. If not, you can add `vendor/nesbot/carbon/extension.neon` to your `phpstan.neon` file to enable the Carbon PHPStan extension.
+
+### `checkPhpDocMissingReturn: false` config option removed
+######  Likelihood Of Impact: Low
+For some historical reason Larastan was setting `checkPhpDocMissingReturn: false` config option. Now the option is removed from Larastan, it'll use the behaviour from PHPStan itself. If you want the old behaviour back you can add the option to your own config.
 
 ## Upgrading to `2.9.6` from `2.9.5`
 
