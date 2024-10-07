@@ -55,6 +55,9 @@ Larastan 3.x removed some code that was handling some edge cases related to Carb
 ######  Likelihood Of Impact: Low
 For some historical reason Larastan was setting `checkPhpDocMissingReturn: false` config option. Now the option is removed from Larastan, it'll use the behaviour from PHPStan itself. If you want the old behaviour back you can add the option to your own config.
 
+### `noEnvCallsOutsideOfConfig` and `checkModelAppends` options are enabled by default
+Starting from Larastan 3.0 the `NoEnvCallsOutsideOfConfigRule` and `ModelAppendsRule` are enabled by default.
+
 ## Upgrading to `2.9.6` from `2.9.5`
 
 This release adds support for Laravel 11 `casts` method. If you are using the `casts` method in your models, you will need to update the return type of the `casts` method to `array` in your model classes. Also, you'd need to provide the correct array shape for the return type. So that Larastan will recognize the model casts. Here is an example:

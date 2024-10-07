@@ -12,7 +12,7 @@ parameters:
     bootstrapFiles:
         - bootstrap.php
     checkOctaneCompatibility: false
-    noEnvCallsOutsideOfConfig: false
+    noEnvCallsOutsideOfConfig: true
     noModelMake: true
     noUnnecessaryCollectionCall: true
     noUnnecessaryCollectionCallOnly: []
@@ -24,7 +24,7 @@ parameters:
     viewDirectories: []
     checkModelProperties: false
     checkUnusedViews: false
-    checkModelAppends: false
+    checkModelAppends: true
 
 parametersSchema:
     checkOctaneCompatibility: bool()
