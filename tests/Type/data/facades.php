@@ -22,8 +22,8 @@ function test(): void
     assertType('null', Event::assertNotDispatched('FooEvent'));
 
     $redis = Redis::connection();
-    assertType('(array|Redis|false)', $redis->lrange('some-key', 0, -1));
-    assertType('(array|Redis|false)', Redis::lrange('some-key', 0, -1));
+    assertType('(array<mixed>|Redis|false)', $redis->lrange('some-key', 0, -1));
+    assertType('(array<mixed>|Redis|false)', Redis::lrange('some-key', 0, -1));
     assertType('(bool|Redis)', Redis::expire('foo', 3));
     assertType('(array<string, mixed>|Redis|false)', Redis::hmget('h', ['field1', 'field2']));
 
