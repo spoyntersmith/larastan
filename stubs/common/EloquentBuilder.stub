@@ -398,6 +398,28 @@ class Builder
     public function chunk($count, $callback);
 
     /**
+     * Chunk the results of a query by comparing IDs.
+     *
+     * @param  int  $count
+     * @param  callable(\Illuminate\Database\Eloquent\Collection<int, TModel>, int): mixed  $callback
+     * @param  string|null  $column
+     * @param  string|null  $alias
+     * @return bool
+     */
+    public function chunkById($count, callable $callback, $column = null, $alias = null);
+
+    /**
+     * Run a map over each item while chunking.
+     *
+     * @template TReturn
+     *
+     * @param  callable(TModel): TReturn  $callback
+     * @param  int  $count
+     * @return \Illuminate\Support\Collection<int, TReturn>
+     */
+    public function chunkMap(callable $callback, $count = 1000);
+
+    /**
      * Get a collection with the values of a given column.
      *
      * @param  model-property<TModel>|\Illuminate\Contracts\Database\Query\Expression  $column
@@ -441,6 +463,7 @@ class Builder
      * @return array<string, mixed>
      */
     public function qualifyColumns($columns);
+
 }
 
 class Scope {}
