@@ -9,6 +9,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Enumerable;
 use Iterator;
 use IteratorAggregate;
+use PhpParser\Node\Expr\ClassConstFetch;
+use PhpParser\Node\Name;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\MissingMethodFromReflectionException;
 use PHPStan\Reflection\ReflectionProvider;
@@ -70,7 +72,19 @@ final class CollectionHelper
     public function determineCollectionClassName(string $modelClassName): string
     {
         try {
-            $newCollectionMethod = $this->reflectionProvider->getClass($modelClassName)->getNativeMethod('newCollection');
+            $modelReflection = $this->reflectionProvider->getClass($modelClassName);
+
+            $attrs = $modelReflection->getNativeReflection()->getAttributes('Illuminate\Database\Eloquent\Attributes\CollectedBy');
+
+            if ($attrs !== []) {
+                $expr =  $attrs[0]->getArgumentsExpressions()[0];
+
+                if ($expr instanceof ClassConstFetch && $expr->class instanceof Name) {
+                    return $expr->class->toString();
+                }
+            }
+
+            $newCollectionMethod = $modelReflection->getNativeMethod('newCollection');
             $returnType          = $newCollectionMethod->getVariants()[0]->getReturnType();
 
             $classNames = $returnType->getObjectClassNames();
