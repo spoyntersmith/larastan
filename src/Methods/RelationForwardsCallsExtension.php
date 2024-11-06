@@ -103,7 +103,7 @@ final class RelationForwardsCallsExtension implements MethodsClassReflectionExte
 
         return new EloquentBuilderMethodReflection(
             $methodName,
-            $classReflection,
+            $reflection->getDeclaringClass(),
             $parametersAcceptor->getParameters(),
             $returnType,
             $parametersAcceptor->isVariadic(),
