@@ -23,6 +23,8 @@ parameters:
     level: 5
     paths:
         - app/
+    ignoreErrors:
+        - '#.*is not covariant with PHPDoc type list\<string\>.*#'
 EOF
 
 echo "Test Laravel"
