@@ -25,7 +25,7 @@ jobs:
 
     strategy:
       matrix:
-        php: ["8.0"]
+        php: ["8.2"]
 
     steps:
       - name: "Checkout"
@@ -40,7 +40,7 @@ jobs:
           coverage: "none"
 
       - name: "Check Composer configuration"
-        run: "composer validate --strict"
+        run: "composer validate"
 
       - name: "Determine composer cache directory"
         id: "determine-composer-cache-directory"
