@@ -74,7 +74,7 @@ final class CollectionHelper
         try {
             $modelReflection = $this->reflectionProvider->getClass($modelClassName);
 
-            $attrs = $modelReflection->getNativeReflection()->getAttributes('Illuminate\Database\Eloquent\Attributes\CollectedBy');
+            $attrs = $modelReflection->getNativeReflection()->getAttributes('Illuminate\Database\Eloquent\Attributes\CollectedBy'); //@phpstan-ignore argument.type (Attribute class might not exist)
 
             if ($attrs !== []) {
                 $expr =  $attrs[0]->getArgumentsExpressions()[0];
