@@ -81,7 +81,6 @@ jobs:
       - name: "Install dependencies"
         run: |
           cd e2e/
-          echo -E "$( jq '.replace."spatie/laravel-ray"="*"' --indent 4 composer.json ) > composer.json"
           composer install --no-scripts --no-interaction
           composer config repositories.0 '{ "type": "path", "url": "../larastan" }'
           composer config minimum-stability dev

@@ -38,9 +38,6 @@ jobs:
       - name: "Checkout code"
         uses: "actions/checkout@v4"
 
-      - name: "Workaround for dependency hell"
-        run: "echo -E \"$( jq '.replace.\"spatie/laravel-ray\"=\"*\"' --indent 4 composer.json )\" > composer.json"
-
       - name: "Setup PHP"
         uses: "shivammathur/setup-php@v2"
         with:
