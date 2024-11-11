@@ -29,6 +29,7 @@
     },
     "require-dev": {
         "doctrine/coding-standard": "^12.0",
+        "nikic/php-parser": "^5.3",
         "orchestra/canvas": "^v9.1.3",
         "orchestra/testbench": "^9.5.2",
         "phpstan/phpstan-deprecation-rules": "^2.0.0",
