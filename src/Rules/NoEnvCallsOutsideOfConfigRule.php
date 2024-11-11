@@ -50,7 +50,7 @@ class NoEnvCallsOutsideOfConfigRule implements Rule
         return [
             RuleErrorBuilder::message("Called 'env' outside of the config directory which returns null when the config is cached, use 'config'.")
                 ->identifier('larastan.noEnvCallsOutsideOfConfig')
-                ->line($node->getLine())
+                ->line($node->getStartLine())
                 ->file($scope->getFile())
                 ->build(),
         ];

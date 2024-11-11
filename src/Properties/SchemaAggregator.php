@@ -66,8 +66,7 @@ final class SchemaAggregator
 
         foreach ($methods as $stmt) {
             if (
-                $stmt instanceof PhpParser\Node\Stmt\Expression
-                && $stmt->expr instanceof PhpParser\Node\Expr\MethodCall
+                $stmt->expr instanceof PhpParser\Node\Expr\MethodCall
                 && $stmt->expr->var instanceof PhpParser\Node\Expr\StaticCall
                 && $stmt->expr->var->class instanceof PhpParser\Node\Name
                 && $stmt->expr->var->name instanceof PhpParser\Node\Identifier
@@ -76,8 +75,7 @@ final class SchemaAggregator
             ) {
                 $statement = $stmt->expr;
             } elseif (
-                $stmt instanceof PhpParser\Node\Stmt\Expression
-                && $stmt->expr instanceof PhpParser\Node\Expr\StaticCall
+                $stmt->expr instanceof PhpParser\Node\Expr\StaticCall
                 && $stmt->expr->class instanceof PhpParser\Node\Name
                 && $stmt->expr->name instanceof PhpParser\Node\Identifier
                 && ($stmt->expr->class->toCodeString() === '\Schema' || (new ObjectType('Illuminate\Support\Facades\Schema'))->isSuperTypeOf(new ObjectType($stmt->expr->class->toCodeString()))->yes())
@@ -229,7 +227,7 @@ final class SchemaAggregator
             if (! $firstArg instanceof PhpParser\Node\Scalar\String_) {
                 if ($firstArg instanceof PhpParser\Node\Expr\Array_ && $firstMethodCall->name->name === 'dropColumn') {
                     foreach ($firstArg->items as $arrayItem) {
-                        if ($arrayItem === null || ! ($arrayItem->value instanceof PhpParser\Node\Scalar\String_)) {
+                        if (! $arrayItem->value instanceof PhpParser\Node\Scalar\String_) {
                             continue;
                         }
 
@@ -297,7 +295,7 @@ final class SchemaAggregator
                 $secondArgArray = [];
 
                 foreach ($secondArg->items as $arrayItem) {
-                    if ($arrayItem === null || ! ($arrayItem->value instanceof PhpParser\Node\Scalar\String_)) {
+                    if (! $arrayItem->value instanceof PhpParser\Node\Scalar\String_) {
                         continue;
                     }
 
