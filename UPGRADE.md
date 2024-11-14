@@ -2,12 +2,14 @@
 
 ## Upgrading to `3.0` from `2.x`
 
-This is a new major release with lots of breaking changes. Please read the following guide carefully.
+This is a new major release with lots of breaking changes. 
+
+**Please first read PHPStan's 2.0 upgrade guide [here](https://github.com/phpstan/phpstan/blob/2.0.x/UPGRADING.md) carefully.**
 
 ### Correct return types for model relation methods
 ######  Likelihood Of Impact: High
 
-Normally PHPStan warns the users when a return type of method does not provide it's generic types. For example, the following code will produce a PHPStan error:
+Normally PHPStan warns the users when a return type of method does not provide its generic types. For example, the following code will produce a PHPStan error:
 
 ```php
 class User extends Model
@@ -36,7 +38,19 @@ class User extends Model
 }
 ```
 
-TODO: Link to the Rector to fix these automatically
+Manually adding these annotations can be tedious. To help with this, we've created a [Rector](https://github.com/rectorphp/rector) rule that can automatically add them for you! You can use [this rule](https://github.com/driftingly/rector-laravel/blob/main/docs/rector_rules_overview.md#addgenericreturntypetorelationsrector) to automatically add the correct generic annotations. It detects your Laravel version and adds the appropriate generic types accordingly.
+
+If you're not currently using Rector, or can't use it due to dependency conflicts, don't worry! We've also prepared a simple script that can run Rector for you without requiring a full installation.
+
+First install [`cpx`](https://cpx.dev/):
+```bash
+composer global require cpx/cpx
+```
+
+Then download [this script](https://gist.github.com/canvural/7385ec70d2719e9961886430fbb4798c) from the gist and run with:
+```bash
+cpx exec /path/to/script/cpx-rector-larastan-upgrade.php
+```
 
 ### Template annotation renames
 ######  Likelihood Of Impact: Low
@@ -57,6 +71,14 @@ For some historical reason Larastan was setting `checkPhpDocMissingReturn: false
 
 ### `noEnvCallsOutsideOfConfig` and `checkModelAppends` options are enabled by default
 Starting from Larastan 3.0 the `NoEnvCallsOutsideOfConfigRule` and `ModelAppendsRule` are enabled by default.
+
+### Removed `*.blade.php` from `excludePaths` config option
+######  Likelihood Of Impact: Low
+We've removed `*.blade.php` from `excludePaths` config option. If you were analysing paths containing Blade files and now are getting errors for them you can add it back in your configuration via:
+```neon
+excludePaths:
+    - *.blade.php
+```
 
 ## Upgrading to `2.9.6` from `2.9.5`
 
