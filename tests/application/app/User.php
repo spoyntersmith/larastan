@@ -17,6 +17,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -180,6 +182,12 @@ class User extends Authenticatable
         return $this->morphMany(Address::class, 'addressable');
     }
 
+    /** @return HasOne<Address, $this> */
+    public function oneAdress(): HasOne
+    {
+        return $this->hasOne(Address::class);
+    }
+
     /**
      * @return BelongsToMany<Role, $this>
      */
@@ -228,6 +236,30 @@ class User extends Authenticatable
         return new HasManySyncable(
             $instance->newQuery(), $this, $instance->getTable().'.'.$foreignKey, $localKey
         );
+    }
+
+    /** @return HasOne<Mechanic, $this> */
+    public function mechanic(): HasOne
+    {
+        return $this->hasOne(Mechanic::class);
+    }
+
+    /** @return HasOneThrough<Car, Mechanic, $this> */
+    public function car(): HasOneThrough
+    {
+        return $this->hasOneThrough(Car::class, Mechanic::class);
+    }
+
+    /** @return HasManyThrough<Part, Mechanic, $this> */
+    public function parts(): HasManyThrough
+    {
+        return $this->hasManyThrough(Part::class, Mechanic::class);
+    }
+
+    /** @return HasOneThrough<Part, Mechanic, $this> */
+    public function firstPart(): HasOneThrough
+    {
+        return $this->parts()->one();
     }
 
     public function getOnlyAvailableWithAccessorAttribute(): string
