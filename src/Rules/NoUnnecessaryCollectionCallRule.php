@@ -225,7 +225,7 @@ class NoUnnecessaryCollectionCallRule implements Rule
 
         $iterableType = $scope->getType($node->var)->getIterableValueType();
 
-        if ($iterableType instanceof MixedType) {
+        if ((new ObjectType(\stdClass::class))->isSuperTypeOf($iterableType)->yes()) {
             $previousCall = $node->var;
             if ($previousCall instanceof MethodCall) {
                 $queryBuilderType = $scope->getType($previousCall->var);
